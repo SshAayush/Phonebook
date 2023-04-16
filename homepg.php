@@ -6,22 +6,31 @@
       exit();
     }
     include('dbconn.php');
-    // ini_set('display_errors', 0);//for hiding the error because line 4 will show error if we didn't search
-    @$id = $_GET['id']; // @ used to hide error of this specific line
+    $id ;
+    $i = 0;
+    $maifhokenai;
+    @$count = $_GET['count'];
+
+    do{
+    @$id = $_GET[$i]; // @ used to hide error of this specific line
+    
+
     if($id != null){
-    $stmt =$pdo->prepare("SELECT * FROM phonebook where id = :id");
+    $stmt = $pdo->prepare("SELECT * FROM phonebook where id = :id");
     $stmt -> bindParam(':id',$id);
     $stmt -> execute();
-    $value = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $s_value = $value[0]['name'];
+    $value[$i] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $maifhokenai = true;
+    // $s_value = $value[0]['name'];
     }
     else{
     $stmt = $pdo->query('SELECT * FROM phonebook');
     $value = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $s_value = "Search";
-    }
+    $maifhokenai = false;
 
-?>
+    // $s_value = "Search";
+    }$i++;}while($i<$count);
+// ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +51,7 @@
     <div class="d-flex justify-content-end align-items-center">
         <form class="form-inline my-2 my-lg-0" action="search.php" method="POST">
             <div class="input-group">
-                <input type="search" class="form-control rounded-0" placeholder="<?php echo $s_value ?>" name="search" aria-label="Search" aria-describedby="search-addon" />
+                <input type="search" class="form-control rounded-0" placeholder="<?php //echo $s_value ?>" name="search" aria-label="Search" aria-describedby="search-addon" />
                 <div class="input-group-append">
                     <button class="btn btn-primary rounded-0" type="submit">Search</button>
                 </div>
@@ -59,11 +68,14 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($value as $item) { ?>
+            <?php 
+            if($maifhokenai){
+
+                    foreach ($value as $item) {?>
             <tr>
-                <td><?php echo $item['name']?></td>
-                <td><?php echo $item['phone_no']?></td>
-                <td><?php echo $item['addr']?></td>
+                <td><?php echo $item[0]['name'];?></td>
+                <td><?php echo $item[0]['phone_no'];?></td>
+                <td><?php echo $item[0]['addr'] ; ?></td>
                 <td class="d-flex justify-content-around align-items-center">
                     <form action="update.php" method="GET">
                         <button class="btn btn-primary btn-sm text-white" type="submit" name="id" value="<?php echo $item['id']?>">Update</button>
@@ -73,7 +85,24 @@
                     </form>
                 </td>
             </tr>
-            <?php } ?>
+            <?php }} 
+            else{
+
+                    foreach ($value as $item) {?>
+            <tr>
+                <td><?php echo $item['name'];?></td>
+                <td><?php echo $item['phone_no'];?></td>
+                <td><?php echo $item['addr'] ; ?></td>
+                <td class="d-flex justify-content-around align-items-center">
+                    <form action="update.php" method="GET">
+                        <button class="btn btn-primary btn-sm text-white" type="submit" name="id" value="<?php echo $item['id']?>">Update</button>
+                    </form>
+                    <form action="delete.php" method="GET">
+                        <button class="btn btn-danger btn-sm text-white" type="submit" name="id" value="<?php echo $item['id']?>">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <?php }}?>
         </tbody>
     </table>
     <div class="d-flex justify-content-around align-items-center">
