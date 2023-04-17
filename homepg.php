@@ -78,10 +78,10 @@
                 <td><?php echo $item[0]['addr'] ; ?></td>
                 <td class="d-flex justify-content-around align-items-center">
                     <form action="update.php" method="GET">
-                        <button class="btn btn-primary btn-sm text-white" type="submit" name="id" value="<?php echo $item['id']?>">Update</button>
+                        <button class="btn btn-primary btn-sm text-white" type="submit" name="id" value="<?php echo $item[0]['id']?>">Update</button>
                     </form>
                     <form action="delete.php" method="GET">
-                        <button class="btn btn-danger btn-sm text-white" type="submit" name="id" value="<?php echo $item['id']?>">Delete</button>
+                        <button class="btn btn-danger btn-sm text-white" type="submit" name="id" value="<?php echo $item[0]['id']?>">Delete</button>
                     </form>
                 </td>
             </tr>

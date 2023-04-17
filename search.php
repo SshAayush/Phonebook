@@ -22,7 +22,7 @@
         // echo $get_id[1];
         $count++;
     }
-    echo $count;
+    // echo $count;
     // Converting the array to a query string
     $queryString = http_build_query($get_id);
     
